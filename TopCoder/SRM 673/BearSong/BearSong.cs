@@ -10,10 +10,10 @@ public class BearSong
 
     public int countRareNotes2(int[] notes)
     {
-        int rareNotes = 0;
+        var rareNotes = 0;
         foreach (var x in notes)
         {
-            int occurrences = 0;
+            var occurrences = 0;
 
             foreach (var y in notes)
             {
