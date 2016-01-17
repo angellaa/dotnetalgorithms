@@ -5,26 +5,26 @@ namespace BearPermutations2
     public class BearPermutations2
     {
         private BigInteger[] sum;
-        private BigInteger[] f;
+        private BigInteger[] p;
         private BigInteger[,] c;
 
         public int GetSum(int n, int mod)
         {
-            PrecomputeFactorials(n, mod);
+            PrecomputePermutations(n, mod);
             PrecomputeCombinations(n);
             ComputeSums(n);
 
             return (int)(sum[n] % mod);
         }
 
-        private void PrecomputeFactorials(int n, int mod)
+        private void PrecomputePermutations(int n, int mod)
         {
-            f = new BigInteger[n + 1];
+            p = new BigInteger[n + 1];
 
-            f[0] = 1;
+            p[0] = 1;
             for (var i = 1; i <= n; i++)
             {
-                f[i] = (f[i - 1] * i) % mod;
+                p[i] = (p[i - 1] * i) % mod;
             }
         }
 
@@ -57,13 +57,18 @@ namespace BearPermutations2
             BigInteger result = 0;
             for (var minIndex = 0; minIndex < n; minIndex++)
             {
-                result += c[n - 1, minIndex] * GetSumWithFixedMin(n, minIndex);
+                result += GetSumWithFixedMin(n, minIndex);
             }
 
             return result;
         }
 
         private BigInteger GetSumWithFixedMin(int n, int minIndex)
+        {
+            return c[n - 1, minIndex] * GetSumWithFixedMinAndPartition(n, minIndex);
+        }
+
+        private BigInteger GetSumWithFixedMinAndPartition(int n, int minIndex)
         {
             return GetSumForLeftSubtrees(n, minIndex) + 
                    GetSumForRightSubtrees(n, minIndex) +
@@ -72,31 +77,39 @@ namespace BearPermutations2
 
         private BigInteger GetSumForLeftSubtrees(int n, int minIndex)
         {
-            return sum[minIndex] * f[n - 1 - minIndex];
+            return sum[minIndex] * p[n - 1 - minIndex];
         }
 
         private BigInteger GetSumForRightSubtrees(int n, int minIndex)
         {
-            return sum[n - 1 - minIndex] * f[minIndex];
+            return sum[n - 1 - minIndex] * p[minIndex];
         }
 
         private BigInteger GetSumForRoot(int n, int minIndex)
         {
             BigInteger result = 0;
 
-            for (var i = 0; i < minIndex; i++)
+            for (var leftMinIndex = 0; leftMinIndex < minIndex; leftMinIndex++)
             {
-                for (var j = minIndex + 1; j < n; j++)
+                for (var rightMinIndex = minIndex + 1; rightMinIndex < n; rightMinIndex++)
                 {
-                    var rootScore = j - i;
-                    var leftCombs = (minIndex - 1 >= 0) ? f[minIndex - 1] : 1;
-                    var rightCombs = (n - minIndex - 2 >= 0) ? f[n - minIndex - 2] : 1;
-
-                    result += rootScore * leftCombs * rightCombs;
+                    result += GetSumForRootWithFixedChildren(n, minIndex, leftMinIndex, rightMinIndex);
                 }
             }
 
             return result;
+        }
+
+        private BigInteger GetSumForRootWithFixedChildren(int n, int minIndex, int leftMinIndex, int rightMinIndex)
+        {
+            var rootScore = rightMinIndex - leftMinIndex;
+
+            var leftPermutations = (minIndex - 1 >= 0) ? p[minIndex - 1] : 1;
+            var rightPermutations = (n - minIndex - 2 >= 0) ? p[n - minIndex - 2] : 1;
+
+            var totalPermutations = leftPermutations * rightPermutations;
+
+            return rootScore * totalPermutations;
         }
     }
 }
