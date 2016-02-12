@@ -5,17 +5,16 @@ public class ListeningSongs
 {
     public int Listen(int[] durations1, int[] durations2, int minutes, int T)
     {
-        Array.Sort(durations1);
-        Array.Sort(durations2);
-
-        var maxTime = minutes * 60;
-
         if (durations1.Length < T || durations2.Length < T)
         {
             return -1;
         }
 
+        Array.Sort(durations1);
+        Array.Sort(durations2);
+
         var time = durations1.Take(T).Sum() + durations2.Take(T).Sum();
+        var maxTime = minutes * 60;
 
         if (time > maxTime)
         {
