@@ -24,7 +24,7 @@ namespace TestingGarbageCollection
             RunTest();
         }
 
-        private readonly List<int[]> gen1list = new List<int[]>();
+        private readonly List<int[]> dataCache = new List<int[]>();
 
         private void RunTest()
         {
@@ -33,15 +33,10 @@ namespace TestingGarbageCollection
                 for (var j = 0; j < 10000; j++)
                 {
                     var data = new int[100];
-                    gen1list.Add(data.ToArray());
+                    dataCache.Add(data.ToArray());
                 }
 
-                gen1list.Clear();
-            }
-
-            for (var i = 0; i < 50; i++)
-            {
-                var gen2array = new int[100000];
+                dataCache.Clear();
             }
         }
     }
