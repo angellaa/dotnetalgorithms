@@ -7,12 +7,6 @@ namespace Broken
     {
         static void Main()
         {
-            Console.WriteLine(Calculate1(5, "aaaaaaaaaaaaaa"));
-            Console.WriteLine();
-            Console.WriteLine(Calculate1(1, "Mississippi"));
-            Console.WriteLine();
-            Console.ReadKey();
-
             for (;;)
             {
                 var m = int.Parse(Console.ReadLine() ?? "0");
@@ -23,7 +17,7 @@ namespace Broken
 
                 var text = Console.ReadLine();
 
-                Console.WriteLine(Calculate1(m, text));
+                Console.WriteLine(Broken2(m, text));
             }
         }
         
@@ -66,6 +60,85 @@ namespace Broken
             }
 
             return max == 0 ? text.Length : max;
+        }
+
+        private static int Broken2(int m, string text)
+        {
+            int result;
+            Broken2Internal(m, text.ToCharArray(), 0, text.Length - 1, out result);
+
+            return result;
+        }
+
+        private static Tuple<int, int> Broken2Internal(int m, char[] text, int start, int end, out int result)
+        {
+            if (start >= end)
+            {
+                result = 0;
+                return Tuple.Create(0, 0);
+            }
+
+            var substring = new string(text).Substring(start, end - start + 1);
+            var frequencyMap = new FrequencyMap(substring);
+
+            //Console.WriteLine($"Count: {frequencyMap.Count}\tLength: {end - start + 1}\t'{substring}'");
+
+            if (frequencyMap.Count <= m)
+            {
+                result = end - start + 1;
+                return Tuple.Create(start, end);
+            }
+
+            int mid = (start + end) / 2;
+
+            int length1;
+            int length2;
+            int length3;
+
+            var result1 = Broken2Internal(m, text, start, mid, out length1);
+            var result2 = Broken2Internal(m, text, mid + 1, end, out length2);
+            var result3 = Broken2Internal(m, text, result1.Item2 + 1, result2.Item1 - 1, out length3);
+
+            var max = Math.Max(length1, Math.Max(length2, length3));
+
+            result = max;
+            return length1 == max ? result1 : (length2 == max ? result2 : result3);
+        }
+
+        private class FrequencyMap
+        {
+            private Dictionary<char, int> frequency = new Dictionary<char, int>();
+
+            public FrequencyMap(string text)
+            {
+                foreach (var c in text)
+                {
+                    Add(c);
+                }
+            }
+
+            public int Count { get; private set; }
+
+            public void Add(char c)
+            {
+                if (!frequency.ContainsKey(c) || frequency[c] == 0)
+                {
+                    frequency[c] = 0;
+                    Count++;
+                }
+
+                frequency[c]++;
+            }
+
+            public void Remove(char c)
+            {
+                frequency[c]--;
+
+                if (frequency[c] == 0)
+                {
+                    Count--;
+                }
+            }
         }
     }
 }
