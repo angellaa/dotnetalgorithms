@@ -7,20 +7,20 @@ namespace Broken
     {
         static void Main()
         {
-            Console.WriteLine(Broken3(5, "This can't be solved by brute force."));
+            //Console.WriteLine(Broken3(5, "This can't be solved by brute force."));
 
-            //for (;;)
-            //{
-            //    var m = int.Parse(Console.ReadLine() ?? "0");
-            //    if (m == 0)
-            //    {
-            //        return;
-            //    }
+            for (;;)
+            {
+                var m = int.Parse(Console.ReadLine() ?? "0");
+                if (m == 0)
+                {
+                    return;
+                }
 
-            //    var text = Console.ReadLine();
+                var text = Console.ReadLine();
 
-            //    Console.WriteLine(Broken3(m, text));
-            //}
+                Console.WriteLine(Broken3(m, text));
+            }
         }
         
         private static int Broken3(int m, string text)
@@ -30,7 +30,7 @@ namespace Broken
 
             var start = 0;
             var end = 0;
-            var result = 1;
+            var result = 0;
 
             while (end < n)
             {
