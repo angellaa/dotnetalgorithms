@@ -7,9 +7,9 @@ namespace Broken
     {
         static void Main()
         {
-            Console.WriteLine(Calculate(5, "aaaaaaaaaaaaaa"));
+            Console.WriteLine(Calculate1(5, "aaaaaaaaaaaaaa"));
             Console.WriteLine();
-            Console.WriteLine(Calculate(1, "Mississippi"));
+            Console.WriteLine(Calculate1(1, "Mississippi"));
             Console.WriteLine();
             Console.ReadKey();
 
@@ -23,11 +23,11 @@ namespace Broken
 
                 var text = Console.ReadLine();
 
-                Console.WriteLine(Calculate(m, text));
+                Console.WriteLine(Calculate1(m, text));
             }
         }
         
-        private static int Calculate(int m, string text)
+        private static int Calculate1(int m, string text)
         {
             if (string.IsNullOrEmpty(text))
             {
@@ -65,12 +65,7 @@ namespace Broken
                 set.Add(c);
             }
 
-            if (max == 0)
-            {
-                return text.Length;
-            }
-
-            return max;
+            return max == 0 ? text.Length : max;
         }
     }
 }
