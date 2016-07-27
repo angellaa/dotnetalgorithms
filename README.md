@@ -1,2 +1,2 @@
 # dotnetalgorithms
-Projects from www.dotnetalgorithms.com blog
+Algoritmic related projects from www.andreaangella.com blog
