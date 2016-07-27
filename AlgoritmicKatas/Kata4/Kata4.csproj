@@ -44,6 +44,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ChessMetric.cs" />
+    <Compile Include="ChessMetricTests.cs" />
     <Compile Include="FlowerGarden.cs" />
     <Compile Include="FlowerGardenTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
